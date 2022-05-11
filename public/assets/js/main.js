@@ -1,5 +1,71 @@
 // document.addEventListener("DOMContentLoaded", function () {
+// import apikey from "apikey.js";
 window.addEventListener("load", function () {
+  (function (f, b) {
+    if (!b.__SV) {
+      var e, g, i, h;
+      window.mixpanel = b;
+      b._i = [];
+      b.init = function (e, f, c) {
+        function g(a, d) {
+          var b = d.split(".");
+          2 == b.length && ((a = a[b[0]]), (d = b[1]));
+          a[d] = function () {
+            a.push([d].concat(Array.prototype.slice.call(arguments, 0)));
+          };
+        }
+        var a = b;
+        "undefined" !== typeof c ? (a = b[c] = []) : (c = "mixpanel");
+        a.people = a.people || [];
+        a.toString = function (a) {
+          var d = "mixpanel";
+          "mixpanel" !== c && (d += "." + c);
+          a || (d += " (stub)");
+          return d;
+        };
+        a.people.toString = function () {
+          return a.toString(1) + ".people (stub)";
+        };
+        i =
+          "disable time_event track track_pageview track_links track_forms track_with_groups add_group set_group remove_group register register_once alias unregister identify name_tag set_config reset opt_in_tracking opt_out_tracking has_opted_in_tracking has_opted_out_tracking clear_opt_in_out_tracking start_batch_senders people.set people.set_once people.unset people.increment people.append people.union people.track_charge people.clear_charges people.delete_user people.remove".split(
+            " "
+          );
+        for (h = 0; h < i.length; h++) g(a, i[h]);
+        var j = "set set_once union unset remove delete".split(" ");
+        a.get_group = function () {
+          function b(c) {
+            d[c] = function () {
+              call2_args = arguments;
+              call2 = [c].concat(Array.prototype.slice.call(call2_args, 0));
+              a.push([e, call2]);
+            };
+          }
+          for (var d = {}, e = ["get_group"].concat(Array.prototype.slice.call(arguments, 0)), c = 0; c < j.length; c++) b(j[c]);
+          return d;
+        };
+        b._i.push([e, f, c]);
+      };
+      b.__SV = 1.2;
+      e = f.createElement("script");
+      e.type = "text/javascript";
+      e.async = !0;
+      e.src =
+        "undefined" !== typeof MIXPANEL_CUSTOM_LIB_URL
+          ? MIXPANEL_CUSTOM_LIB_URL
+          : "file:" === f.location.protocol && "//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js".match(/^\/\//)
+          ? "https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js"
+          : "//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js";
+      g = f.getElementsByTagName("script")[0];
+      g.parentNode.insertBefore(e, g);
+    }
+  })(document, window.mixpanel || []);
+
+  let token = config.mixPanel;
+  // console.log(token);
+
+  mixpanel.init(token, { debug: true });
+  mixpanel.track("Apps launch");
+
   // Header
 
   const headerScroll = document.querySelector("#header");
@@ -12,7 +78,7 @@ window.addEventListener("load", function () {
     }
   });
 
-  // nav cross btn
+  //----------------------------------------------------------------------------------------------------nav cross btn
   let menuBtn = document.querySelector(".nav-mob-icon");
   let allEl = document.querySelectorAll(".nav-link");
   // let allEl2 = document.querySelectorAll("#navbar .nav-link");
@@ -42,10 +108,11 @@ window.addEventListener("load", function () {
 
     // this.classList.toggle("fa-bars");
     this.classList.toggle("fa-times");
+    mixpanel.track("Toggle menu btn");
     // document.querySelector(".nav-menu").style.transition = "0.6s";
   });
 
-  // BackTop
+  // ---------------------------------------------------------------------------------------------BackTop
   const backTop = document.querySelector("#backTop");
   addEventListener("scroll", function () {
     if (window.pageYOffset > 500) {
@@ -55,12 +122,12 @@ window.addEventListener("load", function () {
     }
   });
 
-  //Progression bar with Waypoints.js cdn
+  //--------------------------------------------------------------------------Progression bar with Waypoints.js cdn
   let waypoint = new Waypoint({
     element: document.getElementById("skills"),
     offset: "80%",
     handler: function (direction) {
-      console.log(direction);
+      // console.log(direction);
       let progress = document.getElementsByClassName("progress-bar");
       //   console.log(progress);
       //   progress[0].style.width = progress[0].getAttribute("aria-valuenow") + "%";
@@ -73,9 +140,9 @@ window.addEventListener("load", function () {
       //   console.log(progress[0].getAttribute("aria-valuenow"));
     },
   });
-  console.log(waypoint);
+  // console.log(waypoint);
 
-  //Portfolio with Isotope.js
+  // -----------------------------------------------------------------------------------------------Portfolio with Isotope.js
   let elem = document.querySelector(".portfolio-container");
   imagesLoaded(elem, function () {
     let iso = new Isotope(elem, {
@@ -115,8 +182,7 @@ window.addEventListener("load", function () {
   //   iso.layout();
   // });'
 
-  // Scroll setions active link
-
+  // ------------------------------------------------------------------------------------------Scroll setions active link
   window.addEventListener("scroll", function () {
     const windowScroller = window.scrollY;
     // console.log(windowScroller);
@@ -197,8 +263,7 @@ window.addEventListener("load", function () {
   //   }
   // });
 
-  //Dark mode
-
+  //--------------------------------------------------------------------------------------------------Dark mode
   const darkModeBtn = document.getElementById("dark-mode-btn");
   const darkTheme = "dark-theme";
   const iconTheme = "fa-sun";
@@ -208,7 +273,7 @@ window.addEventListener("load", function () {
   // console.log(localStorage.getItem("theme"));
   // console.log(localStorage.getItem("icon"));
   // console.log(document.body.classList);
-  console.log(darkModeBtn);
+  // console.log(darkModeBtn);
 
   if (localStorage.getItem("theme") === "dark") {
     document.body.classList.add(darkTheme);
@@ -228,6 +293,71 @@ window.addEventListener("load", function () {
     localStorage.setItem("theme", currentTheme());
     // localStorage.setItem("icon", currentIcon());
     // console.log(document.body.classList);
-    console.log(darkModeBtn);
+    // console.log(darkModeBtn);
+    mixpanel.track("Change Background mode");
   });
+
+  // --------------------------------------------------------------------------------------------- trace user event
+
+  const linkToGit = document.querySelectorAll("a.preview-link");
+  const linkToWeb = document.querySelectorAll("a.details-link");
+  const getDownPDF = document.querySelector(".download-div");
+  const formSubmitBtn = document.querySelector(".submit-btn");
+  // const errorPageBtn = document.querySelector(".p-container");
+
+  // Click download pdf
+  getDownPDF.children[0].addEventListener("click", function () {
+    mixpanel.track("Download my PDF resume");
+  });
+
+  // Click Github link
+  linkToGit.forEach((el) => {
+    el.addEventListener("click", function (e) {
+      if (el.parentNode.children[0].innerText === "Full React website") {
+        mixpanel.track("Click Full React website Github");
+      }
+      if (el.parentNode.children[0].innerText === "Login and Signup page") {
+        mixpanel.track("Click Login and Signup Github");
+      }
+      if (el.parentNode.children[0].innerText === "React with styled-component") {
+        mixpanel.track("Click React with styled-component Github");
+      }
+      if (el.parentNode.children[0].innerText === "React form submit with validation") {
+        mixpanel.track("Click React form submit with validation Github");
+      }
+      if (el.parentNode.children[0].innerText === "Fetch data from Pexels") {
+        mixpanel.track("Click Fetch data from Pexels Github");
+      }
+    });
+  });
+
+  // Click Web link
+  for (let i = 0; i < linkToWeb.length; i++) {
+    linkToWeb[i].addEventListener("click", function () {
+      // console.log(linkToWeb[i].closest(".portfolio-info > h4"));
+      if (linkToWeb[i].parentNode.children[0].innerText === "Full React website") {
+        mixpanel.track("Click Full React website");
+      }
+      if (linkToWeb[i].parentNode.children[0].innerText === "Login and Signup page") {
+        mixpanel.track("Click Login and Signup page");
+      }
+      if (linkToWeb[i].parentNode.children[0].innerText === "React with styled-component") {
+        mixpanel.track("Click React with styled-component page");
+      }
+      if (linkToWeb[i].parentNode.children[0].innerText === "React form submit with validation") {
+        mixpanel.track("Click React form submit with validation page");
+      }
+      if (linkToWeb[i].parentNode.children[0].innerText === "Fetch data from Pexels") {
+        mixpanel.track("Click Fetch data from Pexels page");
+      }
+    });
+  }
+
+  //Click submit form
+
+  formSubmitBtn.children[0].addEventListener("click", function () {
+    mixpanel.track("Submit my resume form");
+  });
+
+  // 404 page go for home
 });
